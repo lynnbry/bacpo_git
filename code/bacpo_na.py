@@ -5,15 +5,18 @@ import matplotlib.lines as mlines
 import matplotlib.patches as mpatches
 
 #constants
+
 a=1.0 #constant for f(s,e)/growth func
-m=8.0 #constant for f(s,e)/growth func
-d=1.0 #dilution 
-q1=0.05 #amount of nutrient used for producing enzyme
-q2=0.1 #amount of nutrient used for producing toxin
+m=8 #constant for f(s,e)/growth func
+d=0.5 #dilution 
+q1=0.01 #amount of nutrient used for producing enzyme
+q2=0.2 #amount of nutrient used for producing toxin
 kk=0.1 #toxicity rate against cooperators/x1
 k=1.0 #toxicity rate against cheaters/x3
 s0=1.0 #nutrient concentration
 
+
+#2 options for type of growth rate function, f(s,e)
 '''
 #f(s,e) linear
 def g(b,t):
@@ -53,7 +56,7 @@ def g(b,t):
     return [dsdt,dedt,dpdt,dx1dt,dx2dt,dx3dt]
 
 t=np.linspace(0,50) #timestep
-bo=[1.0,1.0,0,0.495,0.495,0.01] #initial conditions
+bo=[0.5,0.5,0,0.5,0,0] #initial conditions
 b=odeint(g,bo,t) #odesolver over timestep
 
 #figure
