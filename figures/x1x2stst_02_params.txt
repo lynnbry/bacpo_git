@@ -1,0 +1,11 @@
+Python 2.7.12 (v2.7.12:d33e0cf91556, Jun 27 2016, 15:19:22) [MSC v.1500 32 bit (Intel)] on win32
+Type "copyright", "credits" or "license()" for more information.
+>>> 
+ RESTART: C:\Users\Bryan\Documents\bacpo\NumericalAnalysis\bacpo_calccond.py 
+c :  0.15873015873
+radicand :  0.00545225497606
+sol1: 
+s: 0.605233386502 e: 0.0472072909536 x1: 0.165225518338 x2: 0.111111111111
+sol2: 
+s: 0.236036454768 e: 0.1210466773 x1: 0.423663370551 x2: 0.111111111111
+>>> 
