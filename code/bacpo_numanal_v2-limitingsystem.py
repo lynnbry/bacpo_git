@@ -6,7 +6,7 @@ import matplotlib.patches as mpatches
 
 #constants
 a=1.0
-m=8
+m=8.0
 d=0.01
 q1=0.24
 q2=0.25
@@ -45,28 +45,57 @@ def g(b,t):
     dx3dt=x3*(((m*m*s*e)/((a+s)*(a+e)))-d-k*p)
     return [dsdt,dedt,dpdt,dx1dt,dx2dt,dx3dt]
 '''
+xbig=50 #timesteps
 
-t=np.linspace(0,500)
-bo=[0.1079,0.205563,0.6423848,0.04]
+t=np.linspace(0,xbig)
+bo=[0.28,0.2,0.5,0.02]
 b=odeint(g,bo,t)
 
-plt.plot(t,b[:,2],'orange',linewidth=1.0)
+#plot each variable
+plt.plot(t,b[:,2],'r',linewidth=1.0)
 plt.plot(t,b[:,3],'b',linewidth=1.0)
+plt.plot(t,b[:,0],'purple',linewidth=1.0)
+plt.plot(t,b[:,1],'green',linewidth=1.0)
 
+#set axis lengths and ticks
+plt.yticks(np.arange(0,1.1,step=0.25))
 plt.ylim(bottom=0)
-plt.xlim(0,500)
+plt.xlim(0,xbig)
+plt.xticks([0,xbig], visible=True)
 
-plt.xlabel("time")
-line1=mlines.Line2D([],[],color='orange', label = '$x_1$ cooperator')
+#axis labels
+plt.xlabel("Time")
+plt.ylabel("Concentration")
+
+#key
+#line key
+line1=mlines.Line2D([],[],color='red', label = '$x_1$ cooperator')
 line2=mlines.Line2D([],[],color='blue', label='$x_2$ police')
+line3=mlines.Line2D([],[],color='purple', label='substrate')
+line4=mlines.Line2D([],[],color='green', label='enzyme')
+
+
+#constants key
 kdef=mpatches.Patch(color='white', label='k = %.2f' %k1)
 amdef=mpatches.Patch(color='white', label='a= %.2f' %(a))
 qsdef=mpatches.Patch(color='white', label=r'$q_1$=%.2f, $q_2$=%.2f' %(q1,q2))
 s0def=mpatches.Patch(color='white', label=r'$s^0$=%.2f' %s0)
 ddef=mpatches.Patch(color='white', label=r'd=%.2f' %d)
+
+
+#legent location and components
 plt.subplots_adjust(right=0.7)
-plt.legend(handles=[line1,line2,kdef,amdef,qsdef,s0def,ddef],
+
+#legend without constants
+plt.legend(handles=[line1,line2,line3,line4,], 
+           loc=(1.05,0.5))
+#legend w/ constants
+'''
+plt.legend(handles=[line1,line2,line3,line4,kdef,amdef,qsdef,s0def,ddef], 
            loc=(0.9,0.5))
+'''
+
+#produce plot
 plt.show()
 
     
