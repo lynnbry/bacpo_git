@@ -8,16 +8,28 @@ import matplotlib.patches as mpatches
 
 a=1.0 #constant for f(s,e)/growth func
 m=8 #constant for f(s,e)/growth func
+<<<<<<< HEAD
 d=0.01 #dilution 
 q1=0.24 #amount of nutrient used for producing enzyme
 q2=0.25 #amount of nutrient used for producing toxin
 kk=0.0 #toxicity rate against cooperators/x1
 k=0.015 #toxicity rate against cheaters/x3
+=======
+d=0.5 #dilution 
+q1=0.01 #amount of nutrient used for producing enzyme
+q2=0.2 #amount of nutrient used for producing toxin
+kk=0.1 #toxicity rate against cooperators/x1
+k=1.0 #toxicity rate against cheaters/x3
+>>>>>>> ec90ec1b27adb4d1cd0b3b74aa55063f0c89b6e9
 s0=1.0 #nutrient concentration
 
 
 #2 options for type of growth rate function, f(s,e)
+<<<<<<< HEAD
 
+=======
+'''
+>>>>>>> ec90ec1b27adb4d1cd0b3b74aa55063f0c89b6e9
 #f(s,e) linear
 def g(b,t):
     #set to initial conditions
@@ -56,10 +68,15 @@ def g(b,t):
     return [dsdt,dedt,dpdt,dx1dt,dx2dt,dx3dt]
 '''
 
+<<<<<<< HEAD
 xbig=1000 #timesteps
 
 t=np.linspace(0,xbig) #timestep
 bo=[0.5,0.2,0,0.0,0.0,0.3] #initial conditions
+=======
+t=np.linspace(0,50) #timestep
+bo=[0.5,0.5,0,0.5,0,0] #initial conditions
+>>>>>>> ec90ec1b27adb4d1cd0b3b74aa55063f0c89b6e9
 b=odeint(g,bo,t) #odesolver over timestep
 
 #figure

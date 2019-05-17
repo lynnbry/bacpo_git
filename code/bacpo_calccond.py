@@ -45,8 +45,12 @@ def steady_states(q1,q2,d,k1,s0,c,s):
     x2_stst=((q2-q1)*d)/(q2*k1)
     e_stst=(q1*(s0-s-c))
     x1_stst= (e_stst*(1-q2))/q1
+<<<<<<< HEAD
     print "s: ", s, "e: ", e_stst, "x1: ", x1_stst, "x2: ",x2_stst
             
+=======
+    print "x2: ",x2_stst, "e: ", e_stst, "x1: ", x1_stst, "s: ", s
+>>>>>>> ec90ec1b27adb4d1cd0b3b74aa55063f0c89b6e9
     
 
 c=calc_constant(q1,q2,d,k1)
@@ -58,6 +62,9 @@ print "radicand : ", rad
 
 solve_s(a,q1,q2,d,k1,s0,c,rad)
 
+<<<<<<< HEAD
 print "constants: "
 print "a: ", a, "m: ", m, "d: ", d, "q1: ", q1, "q2: ", q2, "k1: ", k1, "s0: ", s0
+=======
+>>>>>>> ec90ec1b27adb4d1cd0b3b74aa55063f0c89b6e9
 
