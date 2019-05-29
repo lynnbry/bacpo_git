@@ -11,7 +11,8 @@ bacpo_numanal_v2-limitingsysyem.py - uses a reduced system where toxin and enzym
 from the system due to linearity. Use for cooperator only model
 
 figures:
-plots and the parameter values used to reproduce them. 
+plots and the parameter values used to reproduce them. cooresponding figures and 
+files share the same filename up to the last underscore. Xtypes_number_sol# and Xtypes_number_params 
 
 products:
 AW_fin.ppt - analytical workflows final presentation
