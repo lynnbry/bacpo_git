@@ -1,5 +1,5 @@
 \documentclass[12pt]{article}
-\usepackage{amsfonts, amsmath, amsthm, amssymb}
+\usepackage{amsfonts, amsmath, amsthm, amssymb, blkarray}
 \usepackage{fancyhdr, atbegshi, graphicx, subfig, float, versions}
 \linespread{1.6}
 \includeversion{quartic}
@@ -14,9 +14,9 @@ Consider model with positive dilution rate D and positive input nutrient concent
 \dot{S}&=D(S^0-S)-\frac{1}{\gamma}F(S,E)(X_1 + X_2+X_3)\\
 \dot{E}&=\eta_E q_1 X_1 F(S,E)-DE\\
 \dot{T}&=\eta_T q_2 X_2 F(S,E) - DT\\
-\dot{X_1} &= X_1((1-q_1)F(S,E)-D- \tilde{k}T)\\
+\dot{X_1} &= X_1((1-q_1)F(S,E)-D- k_1 T)\\
 \dot{X_2}&=X_2((1-q_2)F(S,E)-D)\\
-\dot{X_3}&=X_3(F(S,E)-D-kT)
+\dot{X_3}&=X_3(F(S,E)-D-k_3 T)
 \end{align*}
 
 \noindent \textbf{N1:} assume the per capita uptake rate function $F(S,E)$ is non-negative and twice continuously differentiable and satisfies the following assumptions: 
@@ -33,12 +33,12 @@ Consider model with positive dilution rate D and positive input nutrient concent
 
 \noindent This leads to the scaled system: 
 \begin{align}
-\dot{s}&=d(s^0-s)-(x_1 + x_2+x_3) f(s,e)\\
+\dot{s}&=d(s^0-s)-(x_1 + x_2+x_3) f(s,e) \label{fullfirst} \\
 \dot{e}&=q_1 x_1 f(s,e)-de\\
 \dot{t}&=q_2 x_2 f(s,e) - dt\\
-\dot{x_1} &= x_1((1-q_1)f(s,e)-d- \tilde{k}t)\\
+\dot{x_1} &= x_1((1-q_1)f(s,e)-d- k_1 t)\\
 \dot{x_2}&=x_2((1-q_2)f(s,e)-d)\\
-\dot{x_3}&=x_3(f(s,e)-d-kt)
+\dot{x_3}&=x_3(f(s,e)-d-k_3 t) \label{fullfinal}
 \end{align}
 
 \noindent Note that $f(s,e) \geq 0 \text{ } \forall s,e\geq 0.$ Additionally, $f(0,e)=f(s,0)=0 \text{ }\forall s, e\geq 0$ and $\frac{\partial f}{\partial s} \geq 0$ and $\frac{\partial f}{\partial e} \geq 0$. Consider steady state solutions in the form $(x,e,t,x_1,x_2,x_3)$. 
@@ -46,11 +46,9 @@ Consider model with positive dilution rate D and positive input nutrient concent
 
 \bigskip
 
-\noindent Consider the case where $x_3=0$, removing $\dot{x_3}$ from (1)-(6) and changing $\dot{s}$ to $\dot{s}=d(s^0 -s) - (x_1+x_2)f(s,e)$. Then there are four possible sub cases for $x_1$ and $x_2$. 
-
 \noindent \textbf{CASE 1:} $x_1=x_2=x_3=0$. 
 
-\noindent Then the system is reduced to $$\dot{s}=d(s^0-s)=0.$$ For $\dot{s}=0, s=s^0$. So we have the washout steady state $$W=(s^0,0,0,0,0,0)$$.
+\noindent Then the system is reduced to $$\dot{s}=d(s^0-s).$$ For $\dot{s}=0, s=s^0$. So we have the washout steady state $$E_0=(s^0,0,0,0,0,0)$$.
 
 \noindent \textbf{CASE 2: } $x_2=x_3=0,$ and $x_1>0$. 
 
@@ -71,12 +69,12 @@ Consider model with positive dilution rate D and positive input nutrient concent
 
 \noindent Substituting these values into the above system yields a new system: 
 \begin{align}
-\dot{m}&=d(s^0-m)\\
-\dot{z}&=-dz\\
-\dot{x_1}&=x_1((1-q_1)f(m-\frac{1}{1-q_1} (z+x_1),\frac{1}{1-q_1}(z+q_1 x_1))-d)
+\dot{m}&=d(s^0-m) \label{mdot} \\
+\dot{z}&=-dz \label{zdot} \\
+\dot{x_1}&=x_1((1-q_1)f(m-\frac{1}{1-q_1} (z+x_1),\frac{1}{1-q_1}(z+q_1 x_1))-d) \label{x1dot}
 \end{align}
 
-\noindent Replacing $m$ and $z$ by their limits $s^0$ and $0$, in (12) gives us a new function: $$g(x_1)=\dot{x_1}=x_1 ((1-q_1)f(s^0-\frac{x_1}{1-q_1},x_1 \frac{q_1}{1-q_1})-d).$$
+\noindent Replacing $m$ and $z$ by their limits $s^0$ and $0$, in (\ref{x1dot}) gives us a new function: $$g(x_1)=\dot{x_1}=x_1 ((1-q_1)f(s^0-\frac{x_1}{1-q_1},x_1 \frac{q_1}{1-q_1})-d).$$
 
 \noindent Note that $g(x_1)= 0$ when $x_1=0$ and $f(s^0-\frac{x_1}{1-q_1},x_1 \frac{q_1}{1-q_1})=\frac{d}{1-q_1}$. 
 
@@ -84,8 +82,9 @@ Consider model with positive dilution rate D and positive input nutrient concent
 
 \noindent Further assume \textbf{N2:} that the function $g(x_1)$ is strictly concave down, i.e. $g''(x_1)<0$ for $0 \leq x_1 \leq s^0(1-q_1)$ and $g(x_1)$ is sufficiently large. Then there are exactly 2 positive solutions, $x_{11}$ and $x_{12}$ with $x_{11} < x_{12}$. 
 
-\noindent This gives two possible steady state solutions \begin{align*} S_1&=(s^0- \frac{x_{11}}{1-q_1}, x_{11}\frac{q_1}{1-q_1},0,x_{11},0,0) \text{ and } \\
-S_2&=(s^0- \frac{x_{12}}{1-q_1}, x_{12}\frac{q_1}{1-q_1},0,x_{12},0,0).
+\noindent This gives two possible steady state solutions, one stable and one unstable, 
+\begin{align*} E_1^1&=(s^0- \frac{x_{11}}{1-q_1}, x_{11}\frac{q_1}{1-q_1},0,x_{11},0,0) \text{ and } \\
+E_1^2&=(s^0- \frac{x_{12}}{1-q_1}, x_{12}\frac{q_1}{1-q_1},0,x_{12},0,0).
 \end{align*}
 
 \noindent \textbf{CASE 3: } $x_1=x_3=0$ but $x_2>0$. 
@@ -95,78 +94,98 @@ S_2&=(s^0- \frac{x_{12}}{1-q_1}, x_{12}\frac{q_1}{1-q_1},0,x_{12},0,0).
 \noindent \textbf{CASE 4: } $x_1=x_2=0$, and $x_3>0$. 
 \noindent $x_1 =0 \Rightarrow e =0$, and $e=0 \Rightarrow x_3 =0$ gives a contradiction. Thus, there are no steady states where $x_1,x_2=0$ and $x_3>0$. 
 
-\noindent \textbf{SUBCASE 4: } $x_1 >0$ and $x_2 >0$. 
+\noindent \textbf{CASE 5: } $x_1 =0$, and $x_2, x_3 >0$. By a similar argument in cases 4 and 5, there are no steady state solutions.
+
+\noindent \textbf{CASE: 6} $x_1 >0$ and $x_2 >0$, $x_3=0$. 
 
 \noindent Yields the following system: 
 \begin{align}
-\dot{s}&=d(s^0-s)-(x_1 + x_2) f(s,e)=0\\
-\dot{e}&=q_1 x_1 f(s,e)-de=0\\
-\dot{t}&=q_2 x_2 f(s,e) - dt=0\\
-\dot{x_1} &= x_1((1-q_1)f(s,e)-d- \tilde{k}t)=0\\
-\dot{x_2}&=x_2((1-q_2)f(s,e)-d)=0
-\end{align}
-
-\noindent The system (10)-(14) can be reduced. Note that if we let the following variable: $w=(1-q_2)t-q_2 x_2$, then this satisfies $$\dot{w}=-w$$
-
-\noindent and thus $w(t)\rightarrow 0$ as $t\rightarrow \infty$. This eliminates the variable $t$ from (10)-(14), leaving the remaining 5 dimensional system: 
-
-\begin{align}
-\dot{s}&=d(s^0-s)-(x_1 + x_2+x_3) f(s,e)\\
+\dot{s}&=d(s^0-s)-(x_1 + x_2) f(s,e) \label{12start} \\
 \dot{e}&=q_1 x_1 f(s,e)-de\\
-\dot{x_1} &= x_1((1-q_1)f(s,e)-d- \tilde{k}t^*)\\
-\dot{x_2}&=x_2((1-q_2)f(s,e)-d)\\
-\dot{x_3}&=x_3(f(s,e)-d-kt^*)
+\dot{t}&=q_2 x_2 f(s,e) - dt\\
+\dot{x_1} &= x_1((1-q_1)f(s,e)-d- k_1 t)\\
+\dot{x_2}&=x_2((1-q_2)f(s,e)-d)\label{12last}
 \end{align}
 
-\noindent where $t^* = (\frac{d}{\tilde{k}}(\frac{q_2-q_1}{1-q_2}))$.
+\noindent From $\dot{e}=0,$  
 
-\textbf{REDO BELOW HERE}
+\noindent $q_1 x_1 f(s,e) = de \\ 
+\Rightarrow q_1 x_1 \frac{d}{1-q_2} =de \\ 
+\Rightarrow \frac{q_2}{1-q_2}x_1=e \\ 
+\Rightarrow x_1=e \frac{1-q_2}{q_2} >0$
 
-\noindent Since it's assumed $x_1, x_2>0$, then for $\dot{x_1}=\dot{x_2}=0$, 
+\noindent Additionally, From $\dot{t}=0,$  
 
-$(1-q_1)f(s,e)-d- \tilde{k}t=0$ and $(1-q_2)f(s,e)-d=0$. 
+\noindent $q_2 x_2 f(s,e) = dt \\ 
+\Rightarrow q_2 x_2 \frac{d}{1-q_2} =dt \\ 
+\Rightarrow \frac{q_2}{1-q_2}x_2=t \\ 
+\Rightarrow x_2=t \frac{1-q_2}{q_2} >0$
 
-\noindent Then, $f(s,e)=\frac{d+\tilde{k}t}{1-q_1}=\frac{d}{1-q_2}$.
+\noindent Note also that, since it's assumed $x_1, x_2>0$, then for $\dot{x_1}=\dot{x_2}=0$, 
 
-\noindent Thus, $\frac{d+\tilde{k}t}{1-q_1}=\frac{d}{1-q_2} \Rightarrow t^*=\frac{d}{\tilde{k}}(\frac{q_2-q_1}{1-q_2})$. Note that $t^*>0,$ if and only if $q_2 > q_1$. 
+$(1-q_1)f(s,e)-d- k_1 \big( \frac{d}{k_1}(\frac{q_2-q_1}{1-q_2})\big)=0 \\
+\Rightarrow f(s,e) =\frac{d+k_1 t}{1-q_1}\\
+\text{and}\\
+(1-q_2)f(s,e)-d=0\\
+\Rightarrow f(s,e)=\frac{d}{1-q2}$. 
 
-\noindent From $\dot{t}=0,$  
+\noindent Then, $\frac{d+k_1 t}{1-q_1}= \frac{d}{1-q2} \Rightarrow t^*=(\frac{q_2 - q_1}{1-q_2})\frac{d}{k_1}$.
 
-\noindent $q_2 x_2 f(s,e) = dt^* \\ 
-\Rightarrow q_2 x_2 \frac{d}{1-q_2} =dt^* \\ 
-\Rightarrow \frac{q_2}{1-q_2}x_2=t^* \\ 
-\Rightarrow x_2^*=t^* \frac{1-q_2}{q_2} >0$
+\noindent Thus, $x_2=(\frac{q_2 - q_1}{q_2})\frac{d}{k_1}$
 
-\noindent A similar analysis of $\dot{e}=0$ yields $x_1=e\frac{1-q_2}{q_1} >0$. 
+\noindent Note that $t>0,$ if and only if $q_2 > q_1$. 
 
-\noindent This results in the remaining system: 
+\noindent The system (\ref{12start}) - (\ref{12last}) can be reduced. Note that if we let the following variable: $w=(1-q_2)t-q_2 x_2$, then this satisfies $$\dot{w}=-w$$
+
+\noindent and thus $w(t)\rightarrow 0$ as $t\rightarrow \infty$. This eliminates $t$ from (\ref{12start}) - (\ref{12last}), leaving the remaining 4 dimensional system: 
+
 \begin{align}
-&s^0-s=(x_1+x_2)\frac{1}{1-q_2}\\
+\dot{s}&=d(s^0-s)-(x_1 + x_2+x_3) f(s,e) \label{12start2} \\
+\dot{e}&=q_1 x_1 f(s,e)-de\\
+\dot{x_1} &= x_1\bigg( (1-q_1)f(s,e)-d- k_1 \big( \frac{d}{k_1}(\frac{q_2-q_1}{1-q_2})\big) \bigg)\\
+\dot{x_2}&=x_2((1-q_2)f(s,e)-d) \label{12end2}
+\end{align}
+
+\noindent Using $f(s,e)=\frac{d}{1-q_2}$, and the relationship between $e$ and $x_1$, (\ref{12start2})-(\ref{12end2}) can be rewritten as the following system: 
+\begin{align}
+&s^0-s=(x_1+x_2)\frac{1}{1-q_2} \label{x12two-s}\\
 &q_1 x_1 \frac{1}{1-q_2}= e\\
 &f(s,e) = \frac{d}{1-q_2}
 \end{align}
 
-\noindent Putting the found values of $x_1, x_2$ into the first equation yields a relationship between $s$ and $e$:
+\noindent Putting the found values of $x_1, x_2$ into (\ref{x12two-s}) yields the following relationship between $s$ and $e$:
 
 \noindent $s^0-s=(x_1+x_2)\frac{1}{1-q_2} \\ 
-\Rightarrow s^0-s=(e\frac{1-q_2}{q1}+ t^* \frac{1-q_2}{q_2})\frac{1}{1-q_2}\\ 
-\Rightarrow s^0-s=\frac{t^*}{q_2}+\frac{e}{q_1} \\ 
-\Rightarrow e = q_1(s^0-s-\frac{t^*}{q_2}) >0. $
+\Rightarrow s^0-s=\bigg( e\frac{1-q_2}{q1}+ \big( \frac{d}{k_1}(\frac{q_2-q_1}{q_2})\big)\bigg)\frac{1}{1-q_2}\\ 
+\Rightarrow s^0-s=\frac{t}{q_2}+\frac{e}{q_1} \\
+\text{let } c= \frac{d}{k_1 (1-q_2)}(\frac{q_2-q_1}{q_2}) 
+\Rightarrow e = q_1(s^0-s-c) >0. $
 
-\noindent Thus, there is a necessary condition on $s^0$ and $s$ such that $s^0- \frac{t^*}{q_2}>s.$
+\noindent Thus, there is a necessary condition on $s^0$ and $s$ such that $s^0- c>s.$
 
-\noindent Set $\tilde{h}(s)=f(s,q_1(s^0-s-\frac{t}{q_2}))$
+\noindent Set $\tilde{h}(s)=f(s,q_1(s^0-s-c))$
 
-\noindent Note that by \textbf{N1} $\tilde{h}(0)=f(0,q_1(s^0 - \frac{t^*}{q_2}))=0$, $\tilde{h}(s^0-\frac{t^*}{q_2}=f(s,0))=0$ and $\tilde{h}(s)>0$ when $0<s<s^0 - \frac{t^*}{q_2}$ and $q_2>q_1$. 
+\noindent Note that by \textbf{N1} $\tilde{h}(0)=f(0,q_1(s^0 - c))=0$, $\tilde{h}(s^0-c)=f(s,0)=0$ and $\tilde{h}(s)>0$ when $0<s<s^0 - c$ and $q_2>q_1$. 
 
-\noindent Additionally assume \textbf{N2:} that $\tilde{h}(s)$ is strictly concave down (i.e. $\tilde{h}''(s)<0$ for $0<s<s^0 - \frac{t}{q_2}$ and $q_2>q_1$, and that $\tilde{h}(s)=\frac{d}{1-q_2}$ is sufficiently small. Then $\tilde{h}(s)$ has exactly two positive solutions: $\bar{s}$ and $\hat{s}$ with $\bar{s}< \hat{s}$
+\noindent Additionally assume \textbf{N3:} that $\tilde{h}(s)$ is strictly concave down (i.e. $\tilde{h}''(s)<0$ for $0<s<s^0 - c$ and $q_2>q_1$, and that $\tilde{h}(s)=\frac{d}{1-q_2}$ is sufficiently small. Then $\tilde{h}(s)$ has exactly two positive solutions: $s_{1}$ and $s_2$, with $s_1< s_2$.
 
-\noindent This results in two steady state solutions: $\bar{B}=(\bar{s}, \bar{e}, t^*, \bar{x_1}, x_2^*,0)$\\ and $\hat{B}=(\hat{s}, \hat{e}, t^*, \hat{x_1}, x_2^*,0)$, where $\bar{e} = q_1(s^0-\bar{s}-\frac{t^*}{q_2})$, $\hat{e} = q_1(s^0-\hat{s}-\frac{t^*}{q_2})$, $\bar{x_1}=\bar{e} \frac{1-q_2}{q_1}$, and $\hat{x_1}=\hat{e} \frac{1-q_2}{q_1}$. 
+\noindent This results in two steady state solutions:\\ $E_{12}^1=(s_1, e_1, (\frac{q_2 - q_1}{1-q_2})\frac{d}{k_1}, x_1^1, x_2^1,0)$ and $E_{12}^2=(s_2, e_2, (\frac{q_2 - q_1}{1-q_2})\frac{d}{k_1} , x_1^2, x_2^2,0)$,\\ where $e_1 = q_1(s^0-s_1-c)$, $e_2 = q_1(s^0-s_2-c)$, $x_1^1=e_1 \frac{1-q_2}{q_1}$, and $x_1^2=e_2 \frac{1-q_2}{q_1}$. 
 
+\noindent \textbf{CASE 7: }
 
-\noindent Thus, for $x_3=0,$ there are five steady state solutions: $W, S_1, S_2, \hat{B},$ and $\bar{B}$. 
+\noindent When considering the full system, (\ref{fullfirst})-(\ref{fullfinal}), we get 
 
-\noindent To determine the stability of these five steady states, we analyze their Jacobians. 
+\noindent $((1-q_1)f(s,e)-d-k_1 t)=0\\
+\Rightarrow t = \frac{(1-q_1) f(s,e)-d}{k_1}\\
+\text{and}
+f(s,e)-d-k_3 t=0\\
+\Rightarrow t= \frac{f(s,e)-d}{k_3}.$
+
+\noindent Thus, there are two different and unlikely equal values for $t$ in a biological system, so there are no solutions. 
+
+\noindent Thus, for all seven cases, there are five steady state solutions: $E_0, E_1^1, E_1^2, E_{12}^1$ and $E_{12}^2$. 
+
+\noindent To determine the stability of these steady states, we analyze their Jacobians. 
 
 \noindent Let the Jacobian of (1)-(6), with $Z$ being a steady state, be defined as\\ $J(Z)=$
 \[ 
@@ -180,14 +199,14 @@ x_2 (1-q_2) \frac{\partial f}{\partial s} & x_2(1-q_2)\frac{\partial f}{\partial
 x_3 \frac{\partial f}{\partial s} & x_3 \frac{\partial f}{\partial e} & -k x_3 & 0 & 0 & f-d-kt
 \end{bmatrix}
 \]
-where the arguement $(s,e)$ is suppressed on $f$ to ease notation. 
+where the argument $(s,e)$ is suppressed on $f$ to ease notation. 
 
 
 \noindent To determine the stability of of the five steady states, we will consider each of their Jacobians.
 
-\noindent First we consider steady state $W=(s^0,0,0,0,0,
-0)$, then\\ $J(W)=$ 
-\[ 
+\noindent First we consider steady state $E_0=(s^0,0,0,0,0,
+0)$, then\\  
+\[ J(E_0)=
 \begin{bmatrix}
 -d & 0 & 0 & 0 & 0 & 0\\
 0 & -d & 0 & 0 & 0 & 0\\
@@ -198,77 +217,41 @@ where the arguement $(s,e)$ is suppressed on $f$ to ease notation.
 \end{bmatrix}
 \]
 
-\noindent Note that the determinant of $J(W)-\lambda I$ is given by: $$det(J(W)-\lambda I)=(-d-\lambda)^6.$$ Thus for $det(J(W)-\lambda I)=0$, $\lambda = -d$. 
+\noindent Note that the determinant of $J(E_0)-\lambda I$ is given by: $$det(J(E_0)-\lambda I)=(-d-\lambda)^6.$$ Thus for $det(J(E_0)-\lambda I)=0$, all six Eigenvalues $\lambda = -d$. 
 
-\noindent Since all eigenvectors are equal, real, and negative, this steady state is asymptotically stable.  
+\noindent Since all Eigenvalues are equal, real, and negative, this steady state is stable.  
 
-\noindent Next we consider the steady state $S_1=(s_1^*, q_1(s^0-s_1^*),0,(1-q_1)(s^0-s_1^*),0,0).$ This steady state produces the Jacobian \\$J(S_1)=$
-
-\[ 
-\begin{bmatrix}
--d-x_1 \frac{\partial f}{\partial s} & -x_1 \frac{\partial f}{\partial e} & 0 & -f & -f & -f\\
-q_1 x_1 \frac{\partial f}{\partial s} & q_1 x_1 \frac{\partial f}{\partial e}-d & 0 & q_1 f & 0 & 0 \\
-0 & 0 & -d & 0 & q_2 f & 0 \\
-x_1(1-q_1)\frac{\partial f}{\partial s} & x_1(1-q_1)\frac{\partial f}{\partial e} & -\tilde{k} x_1 & (1-q_1) f-d=0 & 0 & 0 \\
-0 & 0 & 0 & 0 & (1-q_2) f-d & 0 \\
-0 & 0 & 0 & 0 & 0 & f-d
-\end{bmatrix}
+\noindent Next we consider the steady states $E_1^1$ and $E_1^2$ using the system (\ref{mdot})-(\ref{x1dot}). This steady state produces the Jacobian 
+\[
+J(E_1) = \begin{blockarray}{cccc}
+ & \frac{\cdot}{\partial m} & \frac{\cdot}{\partial z} & \frac{\cdot}{\partial x_1} \\
+\begin{block}{c(ccc)}
+\frac{\partial \dot{m}}{\cdot} & -d & 0 & 0 \\
+\frac{\partial \dot{z}}{\cdot} & 0 & -d & 0 \\
+\frac{\partial \dot{x_1}}{\cdot} & x_1 (1-q_1)f' & 0 & ((1-q_1)f-d)-x_1(1-q_1)f' \\
+\end{block}
+\end{blockarray}
 \]
+where the arguments $s,e$ are suppressed on $f$ to ease notation.
 
-\noindent where the argument $(s_1^*,q_1(s^0-s_1^*))$ is suppressed on $f$ to ease notation.  
+\noindent Thus the determinant of $J(E_1)-\lambda I$ is given by: $$det(J(E_1)-\lambda I)=(-d-\lambda )^2 ((1-q_1)f-d-x_1(1-q_1)f'-\lambda).$$
 
-\noindent Note that
-\begin{equation*}
-\resizebox{0.9\hsize}{!}{$det(J(S_1)-\lambda I)=(f-d-\lambda)[(1-q_2)f-d-\lambda](-d-\lambda )^2[-\lambda^2 - \lambda (d+x_1 q_1 \frac{\partial f}{\partial e} - x_1 \frac{\partial f}{\partial s}) - x_1(1-q_1)f(q_1\frac{\partial f}{\partial e} - \frac{\partial f}{\partial s}) ]$}
-\end{equation*}
+\noindent Therefore, $\lambda_{1,2}=-d$ and $\lambda_3 = (1-q_1)(f-x_1 f') -d$. \\ 
+\noindent For stability, we require $\lambda_3<0$, thus we consider where $\lambda_3 = 0.$ Note that $\lambda_3=0 \Rightarrow x_1 = \frac{1}{f'} (f-\frac{d}{1-q_1})$. For $x_1>0$, it is required that $d$ be sufficiently small.
 
-\noindent Thus, it has Eigenvalues $\lambda_1 = f-d$, $\lambda_2 = (1-q_2)f-d$, $\lambda_3=\lambda_4= -d$, $\lambda_5,\lambda_6 =-(d+x_1(\frac{\partial f}{\partial s}-q_1\frac{\partial f}{\partial e})) \pm \sqrt{\frac{1}{2}(d+x_1(\frac{\partial f}{\partial s}-q_1 \frac{\partial f}{\partial e})^2 - 2 x_1 (1-q_1) f (\frac{\partial f}{\partial s}-q_1 \frac{\partial f}{\partial e}})$. 
-
-\noindent Since $\lambda_3 ,$ and $ \lambda_4 ,$ are negative and real, this steady state solution can either be unstable or a saddle point depending on the values of $\lambda_1 , \lambda_2, \lambda_5,$ and $\lambda_6$. In particular, if $d<(1-q_2)f$, then $\lambda_1$, $\lambda_2 >0$, and $S_1$ is a saddle point. 
-
-\noindent For the steady state $S_2=(s_2^*, q_1(s^0-s_2^*),0,(1-q_1)(s^0-s_2^*),0,0)$,\\ $J(S_2)=J(S_1)$ where the argument on $f$ is $(s_2^*, q_1(s^0-s_2^*))$, and therefore has the same stability conditions. 
-
-\noindent This leaves two remaining steady states, $\hat{B}$ and $\bar{B}$. 
-
-\noindent First, consider $\bar{B}=(\bar{s},\bar{e},t^*,\bar{x_1},x_2^*,0)$. 
-
-\noindent $J(\bar{B})=$
-\[ 
-\tiny
-\begin{bmatrix}
--d-(\bar{x_1}+ x_2^*)\frac{\partial f}{\partial s} & -(\bar{x_1}+x_2^*)\frac{\partial f}{\partial e} & 0 & -f & -f & -f\\
-q_1 \bar{x_1} \frac{\partial f}{\partial s} & q_1 \bar{x_1} \frac{\partial f}{\partial e} -d & 0 & q_1 f & 0 & 0 \\
-q_2 x_2^* \frac{\partial f}{\partial s} & q_2 x_2^* \frac{\partial f}{\partial e} & -d & 0 & q_2 f & 0 \\
-\bar{x_1} (1-q_1)\frac{\partial f}{\partial s} & \bar{x_1} (1-q_1)\frac{\partial f}{\partial e} & -\tilde{k} \bar{x_1} & (1-q_1) f-d-\tilde{k}t^*=0 & 0 & 0 \\
-x_2^* (1-q_2)\frac{\partial f}{\partial s} & x_2^* (1-q_2) \frac{\partial f}{\partial e} & 0 & 0 & (1-q_2) f-d =0& 0 \\
-0 & 0 & 0 & 0 & 0 & f-d-kt^*
-\end{bmatrix}
+\noindent Lastly, we consider the steady states $E_{12}^1$ and $E_{12}^2$, using the system (\ref{12start2})-(\ref{12end2}). Then, 
+\[
+J(E_{12}) = \begin{blockarray}{ccccc}
+ & \frac{\cdot}{\partial s} & \frac{\cdot}{\partial e} & \frac{\cdot}{\partial x_1} & \frac{\cdot}{\partial x_2}\\
+\begin{block}{c(cccc)}
+\frac{\partial \dot{s}}{\cdot} & -d-(x_1 + x_2)\frac{\partial f}{\partial s} & -(x_1 + x_2)\frac{\partial f}{\partial e} & -f & -f \\
+\frac{\partial \dot{e}}{\cdot} & q_1 x_1 \frac{\partial f}{\partial s} & q_1 x_1 \frac{\partial f}{\partial e}-d & q_1 f & 0 \\
+\frac{\partial \dot{x_1}}{\cdot} & (1-q_1)x_1 \frac{\partial f}{\partial s} & (1-q_1)x_1 \frac{\partial f}{\partial e} & 0 & -k_1 \frac{q_2}{1-q_2} x_1 \\
+\frac{\cdot}{\partial x_2} & (1-q_2)x_2 \frac{\partial f}{\partial s} & (1-q_2) x_2 \frac{\partial f}{\partial e} & 0 & 0\\
+\end{block}
+\end{blockarray}
 \]
-
-where the argument $(\bar{s},\bar{e})$ is suppressed on $f$ to ease notation. 
-
-\noindent Note that 
-\begin{align*}
-det(J(\bar{B}))=&(f-(d+\lambda)-kt^*)\bigg\{(\bar{x_1} x_2^* q_1 f \frac{\partial f}{\partial s} \frac{\partial f}{\partial e})\Big[(q_2-q_1)\big( (d+\lambda)((1-q_1)f-(d+\lambda)-\tilde{k} t^*)+\\ \bar{x_1}\tilde{k} q_2 f \big) \Big] \\ +& (d+\lambda)^2 \Big[(\frac{\partial f}{\partial s} - q_1 \frac{\partial f}{\partial e})(\bar{x_1} x_2^* \tilde{k} q_2 f + \bar{x_1}((1-q_2)f-(d+\lambda))((d+\lambda)+\tilde{k} t^*))
-\\&\hspace{1cm}  + (d+\lambda)((1-q_1)f-(d+\lambda)-\tilde{k} t^*)(x_2^* \frac{\partial f}{\partial s}-((1-q_2)f-(d+\lambda))\Big]\bigg\}.
-\end{align*}
-
-\noindent Thus, $det(J(\bar{B}))>0$, and is therefore unstable, under the following two conditions: \\
-1. $(f-d-kt^*)>0$ and
-\begin{align*}
-(\bar{x_1} x_2^* q_1 f \frac{\partial f}{\partial s} \frac{\partial f}{\partial e})&\Big[(q_2-q_1)\big( d((1-q_1)f-d-\tilde{k} t^*)+\bar{x_1}\tilde{k} q_2 f \big) \Big] \\ >& -dd \Big[(\frac{\partial f}{\partial s} - q_1 \frac{\partial f}{\partial e})(\bar{x_1} x_2^* \tilde{k} q_2 f + \bar{x_1}((1-q_2)f-d)(d+\tilde{k} t^*))
-\\&\hspace{1cm}  + d((1-q_1)f-d-\tilde{k} t^*)(x_2^* \frac{\partial f}{\partial s}-((1-q_2)f-d)\Big].
-\end{align*}
-
-\noindent 2. $(f-d-kt^*)<0$ and 
-\begin{align*}
-(\bar{x_1} x_2^* q_1 f \frac{\partial f}{\partial s} \frac{\partial f}{\partial e})&\Big[(q_2-q_1)\big( d((1-q_1)f-d-\tilde{k} t^*)+\bar{x_1}\tilde{k} q_2 f \big) \Big] \\ <& -dd \Big[(\frac{\partial f}{\partial s} - q_1 \frac{\partial f}{\partial e})(\bar{x_1} x_2^* \tilde{k} q_2 f + \bar{x_1}((1-q_2)f-d)(d+\tilde{k} t^*))
-\\&\hspace{1cm}  + d((1-q_1)f-d-\tilde{k} t^*)(x_2^* \frac{\partial f}{\partial s}-((1-q_2)f-d)\Big].
-\end{align*}
-
-\noindent Note that stability of the steady state $\hat{B}=(\hat{s}, \hat{e}, t^*, \hat{x_1}, x_2^*, 0)$ is the same as $\bar{B}$ where $\bar{s}, \bar{e}, \bar{x_1}$ are replaced by $\hat{s}, \hat{e}, \hat{x_1}$ respectively and therefore has the same stability conditions.
-
-
+where the arguments $s$ and $e$ are suppressed to ease notation. 
 
 
 
