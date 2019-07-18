@@ -6,13 +6,13 @@ import matplotlib.patches as mpatches
 
 #constants
 
-a=1.0 #constant for f(s,e)/growth func
-m=8 #constant for f(s,e)/growth func
-d=0.01 #dilution 
+a=5.0 #constant for f(s,e)/growth func
+m=8.0 #constant for f(s,e)/growth func (non-linear)
+d=0.04 #dilution 
 q1=0.24 #amount of nutrient used for producing enzyme
 q2=0.25 #amount of nutrient used for producing toxin
-kk=0.0 #toxicity rate against cooperators/x1
-k=0.015 #toxicity rate against cheaters/x3
+kk=0.01 #toxicity rate against cooperators/x1
+k=0.99 #toxicity rate against cheaters/x3
 s0=1.0 #nutrient concentration
 
 
@@ -56,40 +56,44 @@ def g(b,t):
     return [dsdt,dedt,dpdt,dx1dt,dx2dt,dx3dt]
 '''
 
-xbig=1000 #timesteps
+xbig=50 #timesteps
 
 t=np.linspace(0,xbig) #timestep
-bo=[0.3,0.1,0,0,0.6,0] #initial conditions
+bo=[0.061,0.17,0,0.52,0.16,0.0] #initial conditions
 b=odeint(g,bo,t) #odesolver over timestep
 
 #figure
 #ploting 
-plt.plot(t,b[:,3],'r',linewidth=1.0) #x1/cooperator in red
-plt.plot(t,b[:,0],'purple',linewidth=1.0) #substrate 
-plt.plot(t,b[:,1],'green',linewidth=1.0) #enzyme
+plt.plot(t,b[:,3],'r',linewidth=1.0,linestyle='dashed') #x1/cooperator in red
+plt.plot(t,b[:,0],'purple',linewidth=1.0,linestyle='dashdot') #substrate 
+plt.plot(t,b[:,1],'green',linewidth=1.0,linestyle=(0,(3,1,3,1,1,1))) #enzyme
 plt.plot(t,b[:,4],'b',linewidth=1.0) #x2/police in blue
-plt.plot(t,b[:,5],'deeppink',linewidth=1.0) #x3/cheater in pink
+'''
+plt.plot(t,b[:,5],'deeppink',linewidth=1.0,linestyle=(0,(5,1))) #x3/cheater in pink
+'''
+plt.plot(t,b[:,2],'orange',linewidth=1.0,linestyle=(0,(3,2,1,2,1,2))) #toxin in orange
 
 #set axis lengths and ticks
 plt.yticks(np.arange(0,1.1,step=0.25))
 plt.ylim(bottom=0)
 plt.xlim(0,xbig)
-plt.xticks([0,xbig], visible=True)
+plt.xticks(np.arange(0,xbig+1, step=(xbig/5)), visible=True)
 
 #axis labels
 plt.xlabel("Time")
 plt.ylabel("Concentration")
 
 #legend key
-line5=mlines.Line2D([],[],color='purple', label='substrate')
-line4=mlines.Line2D([],[],color='green', label='enzyme')
-'''
-line1=mlines.Line2D([],[],color='red', label = '$x_1$ cooperator')
-'''
-line2=mlines.Line2D([],[],color='blue', label='$x_2$ police')
-'''
-line3=mlines.Line2D([],[],color='deeppink', label='$x_3$ cheater')
-'''
+line5=mlines.Line2D([],[],color='purple', label='substrate', linestyle='dashdot')
+line4=mlines.Line2D([],[],color='green', label='enzyme',linestyle=(0,(3,1,3,1,1,1)))
+
+line1=mlines.Line2D([],[],color='red', label = '$x_1$ cooperator',linestyle='dashed')
+
+line2=mlines.Line2D([],[],color='blue', label='$x_2$ toxin producer')
+line6=mlines.Line2D([],[],color='orange',label='toxin',linestyle=(0,(3,2,1,2,1,2)))
+
+line3=mlines.Line2D([],[],color='deeppink', label='$x_3$ cheater',linestyle=(0,(5,1)))
+
 #constants key
 kkdef=mpatches.Patch(color='white', label=r'$\tilde{k}$ = %.2f' %kk)
 kdef=mpatches.Patch(color='white', label='k = %.2f' %k)
@@ -100,7 +104,7 @@ ddef=mpatches.Patch(color='white', label=r'd=%.2f' %d)
 plt.subplots_adjust(right=0.7) #legend location
 
 #legend compact
-plt.legend(handles=[line2,line4,line5],
+plt.legend(handles=[line1,line2,line4,line5,line6],
            loc=(1.05,0.5))
 
 #leg w constants
