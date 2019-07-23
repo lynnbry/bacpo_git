@@ -18,9 +18,9 @@ k=0.99 #toxicity rate against cheaters/x3
 s0=1.0 #nutrient concentration
 
 
-#2 options for type of growth rate function, f(s,e)
+#######2 options for type of growth rate function, f(s,e)######
 
-#f(s,e) linear
+####f(s,e) linear
 def g(b,t):
     #set to initial conditions
     s=b[0]
@@ -39,7 +39,7 @@ def g(b,t):
     return [dsdt,dedt,dpdt,dx1dt,dx2dt,dx3dt]
 '''
 
-#f(s,e) Michaellis-menton
+###f(s,e) Michaellis-menton
 def g(b,t):
     #set to initial conditions
     s=b[0]
@@ -64,7 +64,9 @@ t=np.linspace(0,xbig) #timestep
 bo=[0.061,0.17,0,0.52,0.16,0.05] #initial conditions
 b=odeint(g,bo,t) #odesolver over timestep
 
-#plot 3d
+
+######figure, 3d projection######
+
 ###patch start to remove margins###
 from mpl_toolkits.mplot3d.axis3d import Axis
 if not hasattr(Axis, "_get_coord_info_old"):
@@ -79,9 +81,9 @@ if not hasattr(Axis, "_get_coord_info_old"):
 
 fig=plt.figure()
 ax=fig.add_subplot(111,projection='3d')
-ax.plot(b[:,3],b[:,4],b[:,5])
+ax.plot(b[:,3],b[:,4],b[:,5]) #x coop, y police, z cheat
 
-ax.view_init(azim=45)
+ax.view_init(azim=45) #angle of cube
 
 #set axis and labels
 ax.xaxis.set_rotate_label(False)
@@ -93,10 +95,11 @@ ax.set_ylim(0,1)
 ax.zaxis.set_rotate_label(False)
 ax.set_zlabel(r'$X_3$')
 
-
+######end 3d fig######
 
 '''
-#figure, timeseries
+#######figure, timeseries######
+
 #ploting 
 plt.plot(t,b[:,3],'r',linewidth=2.0) #x1/cooperator in red
 plt.plot(t,b[:,0],'purple',linewidth=1.0,linestyle='dashdot') #substrate 
@@ -141,7 +144,7 @@ plt.subplots_adjust(right=0.7) #legend location
 plt.legend(handles=[line1,line2,line3,line4,line5,line6],
            loc=(1.05,0.5))
            
-
+######end, fig timeseries######
 '''
 
 plt.show()
