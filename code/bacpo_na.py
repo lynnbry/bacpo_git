@@ -8,13 +8,13 @@ import matplotlib.patches as mpatches
 
 #constants
 
-a=5.0 #constant for f(s,e)/growth func
+a=1.0 #constant for f(s,e)/growth func
 m=8.0 #constant for f(s,e)/growth func (non-linear)
-d=0.04 #dilution 
+d=0.01 #dilution 
 q1=0.24 #amount of nutrient used for producing enzyme
 q2=0.25 #amount of nutrient used for producing toxin
-kk=0.01 #toxicity rate against cooperators/x1
-k=0.99 #toxicity rate against cheaters/x3
+kk=0.015 #toxicity rate against cooperators/x1
+k=0.3 #toxicity rate against cheaters/x3
 s0=1.0 #nutrient concentration
 
 
@@ -58,10 +58,16 @@ def g(b,t):
     return [dsdt,dedt,dpdt,dx1dt,dx2dt,dx3dt]
 '''
 
-xbig=12000 #timesteps
+xbig=9000 #timesteps
+s0_0=0.1
+e_0=0.21
+t_0=0
+x1_0=0.6
+x2_0=0.02
+x3_0=0.03
 
 t=np.linspace(0,xbig) #timestep
-bo=[0.061,0.17,0,0.52,0.16,0.05] #initial conditions
+bo=[s0_0,e_0,t_0,x1_0,x2_0,x3_0] #initial conditions
 b=odeint(g,bo,t) #odesolver over timestep
 
 
@@ -82,33 +88,55 @@ if not hasattr(Axis, "_get_coord_info_old"):
 fig=plt.figure()
 ax=fig.add_subplot(111,projection='3d')
 ax.plot(b[:,3],b[:,4],b[:,5]) #x coop, y police, z cheat
+ax.plot([x1_0],[x2_0],[x3_0],marker='o',markersize=3,color='r') #initial condition
 
 ax.view_init(azim=45) #angle of cube
 
+init_dot=mlines.Line2D([],[],color='r',marker='o',linestyle='none',label='initial condition')
+ax.legend(handles=[init_dot])
+
 #set axis and labels
 ax.xaxis.set_rotate_label(False)
-ax.set_xlabel(r'$X_1$')
+ax.set_xlabel(r'$x_1$')
 ax.set_xlim(0,1)
 ax.yaxis.set_rotate_label(False)
-ax.set_ylabel(r'$X_2$')
+ax.set_ylabel(r'$x_2$')
 ax.set_ylim(0,1)
 ax.zaxis.set_rotate_label(False)
-ax.set_zlabel(r'$X_3$')
-
-######end 3d fig######
+ax.set_zlabel(r'$x_3$')
 
 '''
+ax.set_zticks(np.arange(0,x3_0+0.01,step=0.01))
+'''
+######end 3d fig######
+'''
+######2d for pairs######
+plt.plot(b[:,3],b[:,5],linewidth=2.0) #
+plt.plot(x1_0,x3_0,marker='o',markersize=3,color='r') #initial condition
+
+plt.xlim(0,1)
+plt.ylim(0,1)
+
+plt.xlabel(r'$x_1$')
+plt.ylabel(r'$x_3$',rotation=0)
+
+#legendkey
+init_dot=mlines.Line2D([],[],color='r',marker='o',linestyle='none',label='initial condition')
+plt.legend(handles=[init_dot],loc=(0.6,0.85))
+######end 2d for pairs######
+
+
 #######figure, timeseries######
 
 #ploting 
-plt.plot(t,b[:,3],'r',linewidth=2.0) #x1/cooperator in red
-plt.plot(t,b[:,0],'purple',linewidth=1.0,linestyle='dashdot') #substrate 
-plt.plot(t,b[:,1],'green',linewidth=0.5,linestyle='dashed') #enzyme
-plt.plot(t,b[:,4],'b',linewidth=1.0) #x2/police in blue
+plt.plot(t,b[:,3],'r',linewidth=3.0) #x1/cooperator in red
+plt.plot(t,b[:,0],'purple',linewidth=2.0,linestyle='dashdot') #substrate 
+plt.plot(t,b[:,1],'green',linewidth=2.0,linestyle='dashed') #enzyme
 
-plt.plot(t,b[:,5],'deeppink',linewidth=0.5) #x3/cheater in pink
+plt.plot(t,b[:,4],'b',linewidth=2.5) #x2/police in blue
+plt.plot(t,b[:,2],'darkorange',linewidth=2.0,linestyle=':') #toxin in orange
 
-plt.plot(t,b[:,2],'darkorange',linewidth=1.0,linestyle=':') #toxin in orange
+plt.plot(t,b[:,5],'deeppink',linewidth=2.0) #x3/cheater in pink
 
 #set axis lengths and ticks
 plt.yticks(np.arange(0,1.1,step=0.25))
@@ -121,15 +149,15 @@ plt.xlabel("Time")
 plt.ylabel("Concentration")
 
 #legend key
-line5=mlines.Line2D([],[],color='purple', label='substrate', linestyle='dashdot')
-line4=mlines.Line2D([],[],color='green', label='enzyme',linestyle='dashed')
+line5=mlines.Line2D([],[],color='purple', label='substrate', linewidth=2.0,linestyle='dashdot')
+line4=mlines.Line2D([],[],color='green', label='enzyme',linewidth=2.0,linestyle='dashed')
 
-line1=mlines.Line2D([],[],color='red', label = '$x_1$ cooperator',linewidth=2.0)
+line1=mlines.Line2D([],[],color='red', label = '$x_1$ cooperator',linewidth=3.0)
 
-line2=mlines.Line2D([],[],color='blue', label='$x_2$ toxin producer',linewidth=1.0)
-line6=mlines.Line2D([],[],color='darkorange',label='toxin',linestyle=':')
+line2=mlines.Line2D([],[],color='blue', label='$x_2$ toxin producer',linewidth=2.5)
+line6=mlines.Line2D([],[],color='darkorange',label='toxin',linewidth=2.0,linestyle=':')
 
-line3=mlines.Line2D([],[],color='deeppink', label='$x_3$ cheater',linewidth=0.5)
+line3=mlines.Line2D([],[],color='deeppink', label='$x_3$ cheater',linewidth=2.0)
 
 #constants key
 kkdef=mpatches.Patch(color='white', label=r'$\tilde{k}$ = %.2f' %kk)
@@ -140,7 +168,7 @@ s0def=mpatches.Patch(color='white', label=r'$s^0$=%.2f' %s0)
 ddef=mpatches.Patch(color='white', label=r'd=%.2f' %d)
 plt.subplots_adjust(right=0.7) #legend location
 
-#legend compact
+#legend
 plt.legend(handles=[line1,line2,line3,line4,line5,line6],
            loc=(1.05,0.5))
            
@@ -152,3 +180,4 @@ plt.show()
 #print consts for records
 print 'a:', a, 'm:', m, 'k1:', k, 'k3:', kk, 's0:', s0, 'd:', d, 'q1:', q1, 'q2:', q2     
 print bo
+print 'timesteps',xbig
